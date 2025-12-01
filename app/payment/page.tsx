@@ -1,6 +1,6 @@
 "use client";
 import React, { useState } from 'react';
-// --- TypeScript Type Definition for Props ---
+
 // กำหนดชนิดข้อมูลสำหรับ props ที่ PaymentOption ได้รับ
 interface PaymentOptionProps {
   title: string;
@@ -12,9 +12,6 @@ interface PaymentOptionProps {
   disabledText?: string;
 }
 
-// --- Reusable Payment Option Component ---
-// นี่คือคอมโพเนนต์สำหรับตัวเลือกการชำระเงินแต่ละอัน
-// We pass props to make this component reusable
 const PaymentOption: React.FC<PaymentOptionProps> = ({ 
   title, 
   subtitle, 
@@ -26,14 +23,12 @@ const PaymentOption: React.FC<PaymentOptionProps> = ({
 }) => {
   const isSelected = selectedMethod === methodKey;
 
-  // Apply different styles based on whether this option is selected
   // ปรับสไตล์ตามสถานะ disabled
   const baseClasses = "border rounded-lg p-5 flex items-center justify-between transition-all duration-200";
   const selectedClasses = "border-blue-600 ring-2 ring-blue-500 bg-blue-50";
   const unselectedClasses = "border-gray-300 bg-white";
   const disabledClasses = "bg-gray-100 opacity-60 cursor-not-allowed";
 
-  // Handle click event, only if not disabled
   const handleClick = () => {
     if (!disabled) {
       onSelect(methodKey);
@@ -49,7 +44,6 @@ const PaymentOption: React.FC<PaymentOptionProps> = ({
         ${disabled ? disabledClasses : "cursor-pointer hover:bg-gray-50"}
       `}
     >
-      {/* Left side: Title and Subtitle */}
       <div>
         <div className="flex items-center space-x-2">
           <h3 className="font-semibold text-gray-800">{title}</h3>
@@ -63,7 +57,6 @@ const PaymentOption: React.FC<PaymentOptionProps> = ({
         <p className="text-sm text-gray-500 mt-1">{subtitle}</p>
       </div>
 
-      {/* Right side: Button */}
       <button
         onClick={handleClick}
         className={`
@@ -78,54 +71,47 @@ const PaymentOption: React.FC<PaymentOptionProps> = ({
     </div>
   );
 };
-// --- Main Checkout Page Component ---
+//  Main Checkout Page Component 
 export default function CheckoutPage() {
-  // ลบ const router = useRouter();
-  // State to track the selected payment method
   // กำหนด Type ให้ State ว่าเป็น string หรือ null
   const [selectedMethod, setSelectedMethod] = useState<string | null>(null); // 'cash' or 'qrcode'
   
   // เพิ่ม State สำหรับควบคุม Modal
   const [isModalOpen, setIsModalOpen] = useState(false);
-  // Handler functions for bottom buttons
   const handleConfirm = () => {
-    // Don't allow confirmation if QRcode is selected or nothing is selected
     if (!selectedMethod || selectedMethod === 'qrcode') {
       console.log("Please select a valid payment method.");
       return;
     }
-    // --- เปลี่ยนเป็นเปิด Modal ---
+    //  เปลี่ยนเป็นเปิด Modal 
     setIsModalOpen(true);
   };
   const handleCancel = () => {
     console.log("Payment Cancelled");
-    // router.push('/'); // กลับไปหน้าหลัก (หรือหน้าตะกร้าสินค้า)
     window.location.href = '/bucket';
   };
-  // --- ฟังก์ชันใหม่สำหรับปิด Modal และเปลี่ยนหน้า ---
+  // ฟังก์ชันใหม่สำหรับปิด Modal และเปลี่ยนหน้า 
   const handleModalClose = () => {
     setIsModalOpen(false);
-    window.location.href = '/allproduct'; // เปลี่ยนมาใช้ window.location.href
+    window.location.href = '/allproduct';
   };
-  // Determine if the confirm button should be disabled
   const isConfirmDisabled = !selectedMethod || selectedMethod === 'qrcode';
   return (
-    // Main container, centered on the page with a light background
     <div className="flex items-center justify-center min-h-screen bg-gray-100 p-4">
       
-      {/* --- Modal Pop-up --- */}
+      {/* Modal Pop-up  */}
       {/* จะแสดงผลเมื่อ isModalOpen เป็น true */}
       {isModalOpen && (
         <div className="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-60 p-4">
           {/* กล่อง Modal - ปรับ layout ให้แสดงตรงกลาง */}
           <div className="bg-white p-8 rounded-lg shadow-xl max-w-sm w-full flex flex-col items-center">
             
-            {/* --- ไอคอนติ๊กถูก --- */}
+            {/* ไอคอนติ๊กถูก  */}
             <svg className="w-20 h-20 text-green-500" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M5 13l4 4L19 7"></path>
             </svg>
             
-            {/* --- ข้อความยืนยันใหม่ --- */}
+            {/* ข้อความยืนยันใหม่ */}
             <h3 className="text-xl font-semibold text-gray-900 mt-5">
               ชำระเงินสำเร็จ!
             </h3>
@@ -134,7 +120,7 @@ export default function CheckoutPage() {
             </p>
 
             <div className="mt-8 flex justify-center w-full">
-              {/* ปุ่มปิด Modal - เรียกใช้ handleModalClose */}
+              {/* ปุ่มปิด Modal  เรียกใช้ handleModalClose */}
               <button
                 onClick={handleModalClose} 
                 className="w-full px-5 py-3 bg-blue-600 text-white rounded-lg font-medium hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-opacity-50"
@@ -145,8 +131,8 @@ export default function CheckoutPage() {
           </div>
         </div>
       )}
-      {/* --- End Modal Pop-up --- */}
-      {/* Checkout Card - ปรับขนาดเป็น max-w-2xl และเพิ่ม padding/spacing */}
+      {/* End Modal Pop-up */}
+      {/* Checkout Card  ปรับขนาดเป็น max-w-2xl และเพิ่ม padding/spacing */}
       <div className="bg-white rounded-xl shadow-lg p-8 space-y-6 w-full max-w-2xl">
         
         {/* Top Header */}
@@ -155,9 +141,9 @@ export default function CheckoutPage() {
             เลือกวิธีการชำระ
           </h1>
         </header>
-        {/* Payment Options Area - เพิ่มช่องว่าง */}
+        {/* Payment Options Area  เพิ่มช่องว่าง */}
         <div className="space-y-4">
-          {/* Option 1: Cash */}
+          {/* Cash */}
           <PaymentOption
             title="เงินสด"
             subtitle="เก็บเงินปลายทาง"
@@ -166,7 +152,7 @@ export default function CheckoutPage() {
             onSelect={setSelectedMethod}
           />
           
-          {/* Option 2: QRcode - เพิ่ม props disabled และ disabledText */}
+          {/* QRcode ไม่ได้เปิดให้ใช้ (ทำไม่เป็น) */}
           <PaymentOption
             title="QRcode"
             subtitle="PromPay หรือ ธนาคารใดๆ"
@@ -177,9 +163,7 @@ export default function CheckoutPage() {
             disabledText="กำลังปรับปรุง"
           />
         </div>
-        {/* Bottom Buttons Area - เพิ่มช่องว่าง */}
         <footer className="pt-6 flex justify-between items-center space-x-4">
-          {/* Confirm Button (Left) */}
           <button
             onClick={handleConfirm}
             // ปุ่มจะเป็นสีเทาถ้า isConfirmDisabled เป็น true
@@ -192,8 +176,7 @@ export default function CheckoutPage() {
           >
             ยืนยันการชำระ
           </button>
-          
-          {/* Cancel Button (Right) */}
+    
           < button
             onClick={handleCancel}
             className="w-1/2 py-3 px-6 rounded-lg font-semibold text-white bg-red-600 hover:bg-red-700 transition-colors duration-200"

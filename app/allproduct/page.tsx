@@ -98,7 +98,7 @@ function Header() {
                 if (typeof window !== 'undefined') {
                     localStorage.removeItem('cart_items');
                 }
-                // Redirect ไปหน้า allproduct (จะแสดงเป็น guest)
+                // Redirect ไปหน้า allproduct 
                 router.push('/allproduct');
                 router.refresh();
             }
@@ -113,7 +113,7 @@ function Header() {
     return (
         <header className="bg-amber-900 text-white shadow-md sticky top-0 z-10">
             <nav className="container mx-auto px-6 py-4 flex justify-between items-center">
-                {/* ส่วนด้านซ้าย: โลโก้ และ เมนู */}
+                {/* ส่วนด้านซ้าย โลโก้ และ เมนู */}
                 <div className="flex items-center space-x-8">
                     {/* โลโก้ */}
                     <a href="#" className="flex items-center space-x-2">
@@ -171,7 +171,7 @@ function Header() {
     );
 }
 
-// -- ประเภท (Type) สำหรับ Product --
+//  ประเภท Type Product 
 interface Product {
     id: number;
     name: string;
@@ -179,12 +179,11 @@ interface Product {
     imageUrl: string;
 }
 
-// -- COMPONENT 2: Product Card --
-// (เหมือนเดิมจากโค้ดที่คุณให้มา)
+//  Product Card 
 function ProductCard({ product, onAddToCart }: { product: Product, onAddToCart: (product: Product) => void }) {
     return (
         <div className="border border-gray-200 rounded-lg overflow-hidden shadow-sm hover:shadow-md transition-shadow">
-            {/* รูปสินค้า - คลิกได้เพื่อไปหน้า product detail */}
+            {/* รูปสินค้า  */}
             <Link href={`/product/${product.id}`} className="block cursor-pointer">
                 <div className="w-full h-48 bg-gray-200 flex items-center justify-center">
                     {product.imageUrl ? (
@@ -210,13 +209,13 @@ function ProductCard({ product, onAddToCart }: { product: Product, onAddToCart: 
                     <h3 className="font-semibold text-lg text-gray-800 mb-2 truncate" title={product.name}>{product.name}</h3>
                 </Link>
 
-                {/* 2. สร้าง Flex container สำหรับราคาและปุ่มบวก */}
+                {/* Flex container สำหรับราคาและปุ่มบวก */}
                 <div className="flex justify-between items-center mt-2">
                     <p className="text-amber-800 font-bold text-lg">
                         {product.price.toLocaleString('th-TH', { style: 'currency', currency: 'THB' })}
                     </p>
 
-                    {/* 3. ปุ่ม "บวก" สำหรับเพิ่มเข้าตะกร้า - เปลี่ยน onClick */}
+                    {/* ปุ่ม "บวก" สำหรับเพิ่มเข้าตะกร้า*/}
                     <button
                         onClick={(e) => {
                             e.stopPropagation(); // ป้องกันการ trigger การคลิกไปหน้า product detail
@@ -234,7 +233,7 @@ function ProductCard({ product, onAddToCart }: { product: Product, onAddToCart: 
     );
 }
 
-// ข้อมูลสินค้าจำลอง (Mock Data)
+// ข้อมูลสินค้า
 const mockProducts: Product[] = [
     { id: 1, name: 'ตะเกียงโบราณ', price: 1200, imageUrl: '/product1.jpeg' },
     { id: 2, name: 'นาฬิกาพก', price: 3500, imageUrl: '/product2.jpeg' },
@@ -246,27 +245,27 @@ const mockProducts: Product[] = [
     { id: 8, name: 'เหรียญเก่า', price: 750, imageUrl: '/product8.jpeg' },
 ];
 
-// -- COMPONENT 3: Product Grid (Body) --
-// *** ส่วนนี้คือส่วนที่เราเพิ่ม Logic การค้นหาและจัดเรียง ***
+//  Product Grid 
+// ส่วนนี้คือส่วนที่เราเพิ่ม Logic การค้นหาและจัดเรียง
 function ProductGrid({ onAddToCart }: { onAddToCart: (product: Product) => void }) {
 
     // สถานะสำหรับจัดเรียง
     const [sortState, setSortState] = useState(0); // 0: default, 1: name, 2: price
 
-    // 3. เพิ่ม State สำหรับเก็บค่าในช่องค้นหา
+    // เพิ่ม State สำหรับเก็บค่าในช่องค้นหา
     const [searchTerm, setSearchTerm] = useState("");
 
-    // 4. อัปเดต useMemo ให้กรองข้อมูล (filter) ก่อน แล้วจึงจัดเรียง (sort)
+    //  อัปเดต useMemo ให้กรองข้อมูล (filter) ก่อน แล้วจึงจัดเรียง (sort)
     const filteredAndSortedProducts = useMemo(() => {
 
-        // 4.1 กรองตาม searchTerm ก่อน
+        //  กรองตาม searchTerm ก่อน
         const filteredProducts = mockProducts.filter(product =>
             product.name.toLowerCase().includes(searchTerm.toLowerCase())
         );
 
-        // 4.2 จัดเรียง
+        //  จัดเรียง
         if (sortState === 0) {
-            return filteredProducts; // คืนค่าที่กรองแล้ว (แต่ยังไม่จัดเรียง)
+            return filteredProducts; 
         }
 
         // สร้าง Array ใหม่จากข้อมูลที่กรองแล้วเพื่อจัดเรียง
@@ -279,7 +278,7 @@ function ProductGrid({ onAddToCart }: { onAddToCart: (product: Product) => void 
         }
 
         return sorted;
-    }, [sortState, searchTerm]); // 5. เพิ่ม searchTerm ใน dependencies
+    }, [sortState, searchTerm]); // เพิ่ม searchTerm ใน dependencies
 
     // ฟังก์ชันสำหรับสลับการจัดเรียง
     const toggleSort = () => {
@@ -303,14 +302,14 @@ function ProductGrid({ onAddToCart }: { onAddToCart: (product: Product) => void 
         <main className="container mx-auto px-4 sm:px-6 py-8">
             <div className="bg-white p-4 sm:p-6 rounded-lg shadow-lg">
 
-                {/* 6. ปรับ Layout ส่วนหัว (H2, Search, Sort) */}
+                {/* ปรับ Layout ส่วนหัว */}
                 <div className="flex flex-col md:flex-row justify-between items-start md:items-center mb-6 gap-4">
                     <h2 className="text-2xl font-bold text-gray-800 shrink-0">สินค้าน่าสนใจ</h2>
 
-                    {/* 7. เพิ่ม Container สำหรับช่องค้นหาและปุ่มจัดเรียง */}
+                    {/* เพิ่ม Container สำหรับช่องค้นหาและปุ่มจัดเรียง */}
                     <div className="flex flex-col sm:flex-row items-stretch sm:items-center gap-2 w-full md:w-auto">
 
-                        {/* 8. ช่องค้นหา */}
+                        {/* ช่องค้นหา */}
                         <div className="relative w-full sm:w-auto">
                             <span className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400">
                                 <Search size={18} />
@@ -324,7 +323,7 @@ function ProductGrid({ onAddToCart }: { onAddToCart: (product: Product) => void 
                             />
                         </div>
 
-                        {/* 9. ปุ่มจัดเรียง (เหมือนเดิม แต่ปรับ w-full) */}
+                        {/* ปุ่มจัดเรียง */}
                         <button
                             onClick={toggleSort}
                             title="จัดเรียงสินค้า"
@@ -339,8 +338,8 @@ function ProductGrid({ onAddToCart }: { onAddToCart: (product: Product) => void 
                     </div>
                 </div>
 
-                {/* 10. ตารางสินค้า (ใช้ filteredAndSortedProducts) */}
-                {/* 11. เพิ่มการตรวจสอบว่ามีสินค้าหรือไม่ */}
+                {/* ตารางสินค้า */}
+                {/* เพิ่มการตรวจสอบว่ามีสินค้าหรือไม่ */}
                 {filteredAndSortedProducts.length > 0 ? (
                     <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
                         {filteredAndSortedProducts.map(product => (
@@ -348,7 +347,7 @@ function ProductGrid({ onAddToCart }: { onAddToCart: (product: Product) => void 
                         ))}
                     </div>
                 ) : (
-                    // 12. แสดงข้อความเมื่อไม่พบสินค้า
+                    // แสดงข้อความเมื่อไม่พบสินค้า
                     <div className="text-center text-gray-500 py-16">
                         <p className="text-lg font-semibold">ไม่พบสินค้าที่ตรงกัน</p>
                         {searchTerm && (
@@ -363,13 +362,25 @@ function ProductGrid({ onAddToCart }: { onAddToCart: (product: Product) => void 
     );
 }
 
-// -- COMPONENT 4: Floating Cart Button --
-// (เหมือนเดิมจากโค้ดที่คุณให้มา)
-function CartButton({ itemCount }: { itemCount: number }) { // <--- รับ itemCount
+// Floating Cart Button
+function CartButton({ itemCount, disabled }: { itemCount: number; disabled: boolean }) { 
+    const router = useRouter();
+
+    const handleClick = () => {
+        if (disabled) return;
+        router.push("/bucket");
+    };
+
     return (
-        <a
-            href="/bucket" // 4. ใช้ href เพื่อไปยังหน้าตะกร้า
-            className="fixed bottom-8 right-8 bg-amber-800 text-white w-16 h-16 rounded-full flex items-center justify-center shadow-lg hover:bg-amber-700 transition-transform hover:scale-110"
+        <button
+            type="button"
+            onClick={handleClick}
+            disabled={disabled}
+            className={`fixed bottom-8 right-8 w-16 h-16 rounded-full flex items-center justify-center shadow-lg transition-transform ${
+                disabled
+                    ? "bg-gray-300 text-gray-500 cursor-not-allowed"
+                    : "bg-amber-800 text-white hover:bg-amber-700 hover:scale-110"
+            }`}
             aria-label="เปิดตะกร้าสินค้า"
         >
             <ShoppingCart size={28} />
@@ -380,13 +391,14 @@ function CartButton({ itemCount }: { itemCount: number }) { // <--- รับ it
                     {itemCount}
                 </span>
             )}
-        </a>
+        </button>
     );
 }
 
-// -- MAIN APP COMPONENT --
+// MAIN APP COMPONENT
 export default function AntiqueShopPage() {
     const [cartItemCount, setCartItemCount] = useState(0);
+    const [isLoggedIn, setIsLoggedIn] = useState(false);
 
     useEffect(() => {
         if (typeof window === "undefined") return;
@@ -438,13 +450,30 @@ export default function AntiqueShopPage() {
         setCartItemCount(total);
     };
 
+    useEffect(() => {
+        const syncSession = async () => {
+            const { data } = await supabase.auth.getSession();
+            setIsLoggedIn(!!data.session);
+        };
+
+        syncSession();
+
+        const { data: listener } = supabase.auth.onAuthStateChange((_event, session) => {
+            setIsLoggedIn(!!session);
+        });
+
+        return () => {
+            listener?.subscription.unsubscribe();
+        };
+    }, []);
+
     return (
-        // ใช้ Inter font (ถ้า Tailwind config ตั้งไว้) และ anti-aliased เพื่อความสวยงาม
+        // ใช้ Inter font และ anti-aliased เพื่อความสวยงาม
         <div className="min-h-screen bg-gray-100 font-sans antialiased">
             <Header />
-            {/* 3. ส่งฟังก์ชัน onAddToCart และ itemCount ไปยัง Component ลูก */}
+            {/* ส่งฟังก์ชัน onAddToCart และ itemCount ไปยัง Component ลูก */}
             <ProductGrid onAddToCart={handleAddToCart} />
-            <CartButton itemCount={cartItemCount} />
+            <CartButton itemCount={cartItemCount} disabled={!isLoggedIn} />
         </div>
     );
 }

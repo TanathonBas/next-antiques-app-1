@@ -2,16 +2,14 @@
 
 import React, { useState, useMemo, useEffect } from 'react';
 import { useRouter } from "next/navigation";
-// import Link from 'next/link'; // ลบออกเพื่อใช้ <a> สำหรับการพรีวิว
 
 // --- ไอคอน SVG ---
 
-// (ย้าย type IconProps มาไว้ตรงนี้ และลบส่วนที่ซ้ำซ้อน)
 type IconProps = {
     className: string;
 };
 
-// ไอคอน: ลังสินค้า
+// ไอคอน ลังสินค้า
 const IconBox = ({ className }: IconProps) => (
     <svg className={className} xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
         <path d="M21 10c0-1.1-.9-2-2-2h-6.2c-.4 0-.7-.2-.9-.5l-1.4-2c-.3-.4-.8-.6-1.3-.6H4.8C3.8 5 3 5.9 3 7v10c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2v-4M7 15h10" />
@@ -19,7 +17,7 @@ const IconBox = ({ className }: IconProps) => (
     </svg>
 );
 
-// ไอคอน: รถ
+// ไอคอน รถ
 const IconTruck = ({ className }: IconProps) => (
     <svg className={className} xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
         <path d="M5 18H3c-1.1 0-2-.9-2-2V7c0-1.1.9-2 2-2h10c1.1 0 2 .9 2 2v3.5" />
@@ -29,7 +27,7 @@ const IconTruck = ({ className }: IconProps) => (
     </svg>
 );
 
-// ไอคอน: เงิน
+// ไอคอน เงิน
 const IconMoney = ({ className }: IconProps) => (
     <svg className={className} xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
         <line x1="12" x2="12" y1="1" y2="23" />
@@ -37,7 +35,7 @@ const IconMoney = ({ className }: IconProps) => (
     </svg>
 );
 
-// 2. ไอคอน: ผิด (เพิ่มใหม่)
+// 2. ไอคอน ผิด 
 const IconError = ({ className }: IconProps) => (
     <svg className={className} xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
         <circle cx="12" cy="12" r="10" />
@@ -46,7 +44,7 @@ const IconError = ({ className }: IconProps) => (
     </svg>
 );
 
-// --- 4. (เพิ่ม) คอมโพเนนต์สำหรับป็อปอัพ (Modal) ---
+//  เพิ่มคอมโพเนนต์สำหรับป็อปอัพ (Modal) 
 type ModalProps = {
     isOpen: boolean;
     onClose: () => void;
@@ -60,13 +58,13 @@ const Modal = ({ isOpen, onClose, children }: ModalProps) => {
     return (
         <div
             className="fixed inset-0 bg-black bg-opacity-50 z-40 flex items-center justify-center p-4"
-            onClick={onClose} // ปิดเมื่อคลิกพื้นหลัง
+            onClick={onClose} 
         >
             <div
                 className="bg-white rounded-lg shadow-xl max-w-sm w-full p-6 relative"
-                onClick={e => e.stopPropagation()} // ป้องกันการปิดเมื่อคลิกที่ตัว Modal
+                onClick={e => e.stopPropagation()} 
             >
-                {/*ปุ่มกากบาท (X) ที่ผู้ใช้ขอ */}
+                {/*ปุ่มกากบาท (X)*/}
                 <button
                     onClick={onClose}
                     className="absolute top-3 right-3 text-gray-400 hover:text-gray-600 p-1 rounded-full"
@@ -81,7 +79,7 @@ const Modal = ({ isOpen, onClose, children }: ModalProps) => {
     );
 };
 
-// (เพิ่ม) คอมโพเนนต์สำหรับป็อปอัพ "ตะกร้าว่าง"
+// เพิ่มคอมโพเนนต์สำหรับป็อปอัพ "ตะกร้าว่าง"
 type ErrorModalProps = {
     isOpen: boolean;
     onClose: () => void;
@@ -107,7 +105,7 @@ const EmptyCartModal = ({ isOpen, onClose }: ErrorModalProps) => (
 );
 
 
-// --- กำหนด Type ---
+// กำหนด Type 
 type CartItem = {
     id: number;
     name: string;
@@ -117,14 +115,14 @@ type CartItem = {
     imageUrl: string;
 };
 
-// --- 1. คอมโพเนนต์สำหรับแถบสถานะ ---
-// รับ props: currentStep และ handleNextStep
+// คอมโพเนนต์สำหรับแถบสถานะ 
 type StatusTrackerProps = {
     currentStep: number;
     handleNextStep: () => void;
+    orderItems: CartItem[];
 };
 
-const StatusTracker = ({ currentStep, handleNextStep }: StatusTrackerProps) => {
+const StatusTracker = ({ currentStep, handleNextStep, orderItems }: StatusTrackerProps) => {
     const steps = [
         { name: 'กำลังเตรียมสินค้า', icon: <IconBox className="w-6 h-6" /> },
         { name: 'กำลังจัดส่ง', icon: <IconTruck className="w-6 h-6" /> },
@@ -139,7 +137,7 @@ const StatusTracker = ({ currentStep, handleNextStep }: StatusTrackerProps) => {
                 {/* เส้นเชื่อมพื้นหลัง (สีเทา) */}
                 <div className="absolute top-5 left-0 right-0 h-1 bg-gray-200" style={{ transform: 'translateY(-50%)', zIndex: 1 }}></div>
 
-                {/* เส้นเชื่อม (Active - สีฟ้า) */}
+                {/* เส้นเชื่อม (Active สีฟ้า) */}
                 <div
                     className="absolute top-5 left-0 h-1 bg-blue-500"
                     style={{
@@ -170,7 +168,7 @@ const StatusTracker = ({ currentStep, handleNextStep }: StatusTrackerProps) => {
                     );
                 })}
             </div>
-            {/* (ลบ) ปุ่มชั่วคราวสำหรับทดสอบ */}
+            {/* ลบ ปุ่มชั่วคราวสำหรับทดสอบ */}
             {/* <div className="text-center mt-6">
                  <button 
                      onClick={handleNextStep}
@@ -180,12 +178,26 @@ const StatusTracker = ({ currentStep, handleNextStep }: StatusTrackerProps) => {
                  </button>
             </div> 
             */}
+            {orderItems.length > 0 && (
+                <div className="mt-8">
+                    <h3 className="text-lg font-semibold text-gray-800 mb-4">รายการที่อยู่ในสถานะการสั่งซื้อ</h3>
+                    <div className="space-y-3">
+                        {orderItems.map(item => (
+                            <div key={`order-${item.id}`} className="flex justify-between text-sm text-gray-700">
+                                <span className="font-medium">
+                                    {item.name} x {item.quantity}
+                                </span>
+                                <span>฿{(item.price * item.quantity).toFixed(2)}</span>
+                            </div>
+                        ))}
+                    </div>
+                </div>
+            )}
         </div>
     );
 };
 
-// --- 2. คอมโพเนนต์สำหรับรายการสินค้า ---
-// รับ props: cartItems และ handleRemoveItem
+// คอมโพเนนต์สำหรับรายการสินค้า 
 type CartItemsListProps = {
     cartItems: CartItem[];
     handleRemoveItem: (id: number) => void;
@@ -220,16 +232,15 @@ const CartItemsList = ({ cartItems, handleRemoveItem }: CartItemsListProps) => (
     </div>
 );
 
-// --- 3. คอมโพเนนต์สำหรับสรุปยอด ---
-// รับ props: subtotal, shipping, total และ (เพิ่ม) handleCheckoutClick
+// คอมโพเนนต์สำหรับสรุปยอด 
 type OrderSummaryProps = {
     subtotal: number;
     shipping: number;
     total: number;
-    handleCheckoutClick: () => void; // เพิ่ม prop นี้
+    handleCheckoutClick: () => void; 
 };
 
-const OrderSummary = ({ subtotal, shipping, total, handleCheckoutClick }: OrderSummaryProps) => ( // เพิ่ม handleCheckoutClick
+const OrderSummary = ({ subtotal, shipping, total, handleCheckoutClick }: OrderSummaryProps) => ( 
     <div className="bg-white rounded-lg shadow-md p-6">
         <h2 className="text-xl font-semibold text-gray-800 mb-4">สรุปยอด</h2>
         <div className="space-y-2">
@@ -247,9 +258,8 @@ const OrderSummary = ({ subtotal, shipping, total, handleCheckoutClick }: OrderS
                 <span className="text-blue-600">฿{total.toFixed(2)}</span>
             </div>
         </div>
-        {/* (แก้ไข) เปลี่ยนจาก <a> เป็น <button> และใช้ onClick จาก prop */}
         <button
-            onClick={handleCheckoutClick} // ใช้ prop ที่ส่งมา
+            onClick={handleCheckoutClick} 
             className="w-full bg-blue-600 text-white font-bold py-3 rounded-lg mt-6 hover:bg-blue-700 transition-colors"
         >
             ไปที่หน้าชำระเงิน
@@ -262,12 +272,14 @@ const OrderSummary = ({ subtotal, shipping, total, handleCheckoutClick }: OrderS
 export default function App() {
     const router = useRouter();
     const STORAGE_KEY = "cart_items";
+    const ORDER_STORAGE_KEY = "order_items";
     const [cartItems, setCartItems] = useState<CartItem[]>([]);
+    const [orderItems, setOrderItems] = useState<CartItem[]>([]);
 
     // สถานะสำหรับเก็บขั้นตอนการจัดส่ง (1, 2, หรือ 3)
     const [currentStep, setCurrentStep] = useState(1);
 
-    // (เพิ่ม) สถานะสำหรับ Modal ตะกร้าว่าง
+    // เพิ่ม สถานะสำหรับ Modal ตะกร้าว่าง
     const [isModalOpen, setIsModalOpen] = useState(false);
 
     useEffect(() => {
@@ -277,21 +289,39 @@ export default function App() {
             const stored = localStorage.getItem(STORAGE_KEY);
             if (!stored) {
                 setCartItems([]);
-                return;
+            } else {
+                try {
+                    const parsed = JSON.parse(stored) as CartItem[];
+                    setCartItems(parsed);
+                } catch (error) {
+                    console.error("Failed to parse cart items:", error);
+                }
             }
-            try {
-                const parsed = JSON.parse(stored) as CartItem[];
-                setCartItems(parsed);
-            } catch (error) {
-                console.error("Failed to parse cart items:", error);
+        };
+
+        const loadOrders = () => {
+            const storedOrders = localStorage.getItem(ORDER_STORAGE_KEY);
+            if (!storedOrders) {
+                setOrderItems([]);
+            } else {
+                try {
+                    const parsedOrders = JSON.parse(storedOrders) as CartItem[];
+                    setOrderItems(parsedOrders);
+                } catch (error) {
+                    console.error("Failed to parse order items:", error);
+                }
             }
         };
 
         loadCart();
+        loadOrders();
 
         const handleStorage = (event: StorageEvent) => {
             if (event.key === STORAGE_KEY) {
                 loadCart();
+            }
+            if (event.key === ORDER_STORAGE_KEY) {
+                loadOrders();
             }
         };
 
@@ -302,6 +332,11 @@ export default function App() {
     const persistCart = (items: CartItem[]) => {
         if (typeof window === "undefined") return;
         localStorage.setItem(STORAGE_KEY, JSON.stringify(items));
+    };
+
+    const persistOrders = (items: CartItem[]) => {
+        if (typeof window === "undefined") return;
+        localStorage.setItem(ORDER_STORAGE_KEY, JSON.stringify(items));
     };
 
     const handleRemoveItem = (id: number) => {
@@ -331,17 +366,26 @@ export default function App() {
     };
 
 
-    // ฟังก์ชัน (ชั่วคราว) สำหรับเลื่อนสถานะ
+    // ฟังก์ชันสำหรับเลื่อนสถานะ
     const handleNextStep = () => {
         setCurrentStep(prev => (prev < 3 ? prev + 1 : 1)); // วนกลับไป 1 เมื่อถึง 3
     };
 
-    // (เพิ่ม) ฟังก์ชันสำหรับจัดการการกดปุ่มชำระเงิน
+    // เพิ่มฟังก์ชันสำหรับจัดการการกดปุ่มชำระเงิน
+    const clearCart = () => {
+        setCartItems([]);
+        persistCart([]);
+    };
+
     const handleCheckoutClick = () => {
         if (cartItems.length === 0) {
             setIsModalOpen(true);
             return;
         }
+
+        setOrderItems(cartItems);
+        persistOrders(cartItems);
+        clearCart();
         router.push("/payment");
     };
 
@@ -361,6 +405,7 @@ export default function App() {
                 <StatusTracker
                     currentStep={currentStep}
                     handleNextStep={handleNextStep}
+                    orderItems={orderItems}
                 />
 
                 {/* รายการสินค้า */}
@@ -378,7 +423,7 @@ export default function App() {
                 />
             </div>
 
-            {/* (เพิ่ม) Render Modal */}
+            {/* Render Modal */}
             <EmptyCartModal
                 isOpen={isModalOpen}
                 onClose={() => setIsModalOpen(false)}

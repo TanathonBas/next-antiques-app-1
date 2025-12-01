@@ -53,7 +53,6 @@ export default function Page() {
         }
     };
 
-    // ฟังก์ชันแปลง gender จากภาษาไทยเป็น database format
     const getGenderFromThai = (genderThai: string): string => {
         switch (genderThai) {
             case 'ชาย':
@@ -128,7 +127,6 @@ export default function Page() {
                             imageUrl = urlData.publicUrl;
                         }
                     } else if (imageUrl.includes('profiles/') && !imageUrl.includes('supabase.co')) {
-                        // ถ้าเป็น path ให้สร้าง public URL
                         const { data: urlData } = supabase.storage
                             .from('user_bk')
                             .getPublicUrl(imageUrl);
@@ -153,13 +151,11 @@ export default function Page() {
         loadProfile();
     }, [router]);
 
-    // Handle form input changes
     const handleInputChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
         const { name, value } = e.target;
         setFormData((prev) => ({ ...prev, [name]: value }));
     };
 
-    // Handle image file selection
     const handleImageChange = (e: React.ChangeEvent<HTMLInputElement>) => {
         const file = e.target.files && e.target.files[0];
         if (file) {
@@ -168,7 +164,6 @@ export default function Page() {
         }
     };
 
-    // Handle form submission
     const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault();
         setIsLoading(true);
@@ -182,7 +177,7 @@ export default function Page() {
 
             let profilePicUrl: string | null = null;
 
-            // 1. อัปโหลดรูปโปรไฟล์ใหม่ (ถ้ามี)
+            // อัปโหลดรูปโปรไฟล์ใหม่ (ถ้ามี)
             if (formData.profileImage) {
                 const fileExt = formData.profileImage.name.split('.').pop();
                 const fileName = `${user.id}_${Date.now()}.${fileExt}`;
@@ -228,7 +223,7 @@ export default function Page() {
                 }
             }
 
-            // 2. อัปเดตข้อมูลในตาราง user_tb
+            // อัปเดตข้อมูลในตาราง user_tb
             const updateData: any = {
                 firstName: formData.firstName,
                 lastName: formData.lastName,
@@ -285,7 +280,6 @@ export default function Page() {
                     แก้ไขโปรไฟล์
                 </h1>
                 <form onSubmit={handleSubmit} className="w-full space-y-6">
-                    {/* Profile Image and Input */}
                     <div className="flex flex-col items-center space-y-4 mb-6">
                         <div className="relative">
                             <img
@@ -314,7 +308,6 @@ export default function Page() {
                         />
                     </div>
 
-                    {/* First and Last Name Input */}
                     <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                         <div>
                             <label htmlFor="firstName" className="block text-sm font-medium text-stone-700">
@@ -346,7 +339,6 @@ export default function Page() {
                         </div>
                     </div>
 
-                    {/* Email and Address Input */}
                     <div className="space-y-4">
                         <div>
                             <label htmlFor="email" className="block text-sm font-medium text-stone-700">
@@ -378,7 +370,6 @@ export default function Page() {
                         </div>
                     </div>
 
-                    {/* Gender Selection */}
                     <div>
                         <label htmlFor="gender" className="block text-sm font-medium text-stone-700">
                             เพศ
@@ -397,7 +388,6 @@ export default function Page() {
                         </select>
                     </div>
 
-                    {/* Error and Success Messages */}
                     {error && (
                         <div className="p-3 bg-red-100 border border-red-400 text-red-700 rounded-lg">
                             {error}
@@ -409,7 +399,6 @@ export default function Page() {
                         </div>
                     )}
 
-                    {/* Action Buttons */}
                     <div className="flex justify-center pt-6 border-t border-stone-200 mt-8">
                         <div className="flex flex-col sm:flex-row gap-4 w-full sm:w-auto">
                             <button

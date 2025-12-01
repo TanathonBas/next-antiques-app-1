@@ -1,8 +1,7 @@
 'use client';
 import { Store } from 'lucide-react';
 
-// -- COMPONENT 2: Header (Navbar) --
-// ส่วนหัวของเว็ป (Navbar)
+// Header (Navbar) 
 function Header() {
     return (
         <header className="bg-amber-900 text-white shadow-md sticky top-0 z-10">
@@ -34,9 +33,6 @@ function Header() {
                     </a>
                 </div>
             </nav>
-
-            {/* Mockup สำหรับข่าวสารและเกี่ยวกับเรา (จะแสดงเมื่อคลิกเมนูจริงๆ) */}
-            {/* ในตัวอย่างนี้เราจะยังไม่ทำระบบ routing/modal ครับ */}
         </header>
     );
 }

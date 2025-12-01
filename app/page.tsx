@@ -1,5 +1,5 @@
 import React from 'react';
-import { Link, Sparkles } from 'lucide-react';
+import { Store } from 'lucide-react';
 
 // คอมโพเนนต์หลักสำหรับหน้า Landing/Login
 export default function LandingPage() {
@@ -12,9 +12,12 @@ export default function LandingPage() {
 
         {/* ส่วนโลโก้และชื่อเว็ป */}
         <div className="flex flex-col items-center mb-8">
-          {/* โลโก้ (วงกลม) */}
-          <div className="bg-amber-800 text-white w-24 h-24 rounded-full flex items-center justify-center mb-4">
-            <Sparkles size={60} />
+          {/* โลโก้ หมุน*/}
+          <div
+            className="bg-amber-800 text-white w-24 h-24 rounded-full flex items-center justify-center mb-4 animate-spin"
+            style={{ animationDuration: '5s' }}
+          >
+            <Store size={60} />
           </div>
           {/* ชื่อเว็ป */}
           <h1 className="text-3xl font-bold text-amber-900">ของเก่าเล่าเรื่อง</h1>
