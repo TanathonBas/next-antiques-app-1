@@ -4,21 +4,82 @@ import { Store } from 'lucide-react';
 // คอมโพเนนต์หลักสำหรับหน้า Landing/Login
 export default function LandingPage() {
   return (
-    // จัดหน้าให้อยู่กึ่งกลางจอ และใช้พื้นหลังสีน้ำตาลอ่อน
-    <div className="min-h-screen bg-amber-100 flex items-center justify-center p-4">
+    <>
+      <style>{`
+        .flip-container {
+          perspective: 1000px;
+          width: 96px;
+          height: 96px;
+        }
+        
+        .flip-inner {
+          position: relative;
+          width: 100%;
+          height: 100%;
+          transform-style: preserve-3d;
+          animation: rotateY 3s linear infinite;
+        }
+        
+        .flip-front,
+        .flip-back {
+          position: absolute;
+          width: 100%;
+          height: 100%;
+          backface-visibility: hidden;
+          border-radius: 50%;
+          display: flex;
+          align-items: center;
+          justify-content: center;
+        }
+        
+        .flip-front {
+          background-color: #92400e;
+          color: white;
+        }
+        
+        .flip-back {
+          background-color: #92400e;
+          transform: rotateY(180deg);
+          overflow: hidden;
+        }
+        
+        .flip-back img {
+          width: 100%;
+          height: 100%;
+          object-fit: cover;
+          border-radius: 50%;
+        }
+        
+        @keyframes rotateY {
+          from {
+            transform: rotateY(0deg);
+          }
+          to {
+            transform: rotateY(360deg);
+          }
+        }
+      `}</style>
+      {/* จัดหน้าให้อยู่กึ่งกลางจอ และใช้พื้นหลังสีน้ำตาลอ่อน */}
+      <div className="min-h-screen bg-amber-100 flex items-center justify-center p-4">
 
-      {/* การ์ดสีขาวสำหรับแสดงโลโก้และปุ่ม */}
-      <div className="bg-white w-full max-w-md p-8 rounded-lg shadow-lg">
+        {/* การ์ดสีขาวสำหรับแสดงโลโก้และปุ่ม */}
+        <div className="bg-white w-full max-w-md p-8 rounded-lg shadow-lg">
 
-        {/* ส่วนโลโก้และชื่อเว็ป */}
-        <div className="flex flex-col items-center mb-8">
-          {/* โลโก้ หมุน*/}
-          <div
-            className="bg-amber-800 text-white w-24 h-24 rounded-full flex items-center justify-center mb-4 animate-spin"
-            style={{ animationDuration: '5s' }}
-          >
-            <Store size={60} />
-          </div>
+          {/* ส่วนโลโก้และชื่อเว็ป */}
+          <div className="flex flex-col items-center mb-8">
+            {/* โลโก้ หมุน - มีสองด้าน */}
+            <div className="flip-container mb-4">
+              <div className="flip-inner">
+                {/* ด้านหน้า - โลโก้ */}
+                <div className="flip-front">
+                  <Store size={50} />
+                </div>
+                {/* ด้านหลัง - รูปภาพ */}
+                <div className="flip-back">
+                  <img src="/NINNIN.jpg" alt="Logo" />
+                </div>
+              </div>
+            </div>
           {/* ชื่อเว็ป */}
           <h1 className="text-3xl font-bold text-amber-900">ของเก่าเล่าเรื่อง</h1>
           <p className="text-gray-600">ยินดีต้อนรับ</p>
@@ -54,7 +115,8 @@ export default function LandingPage() {
 
         </div>
 
+        </div>
       </div>
-    </div>
+    </>
   );
 }
