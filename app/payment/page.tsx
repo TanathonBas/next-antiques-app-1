@@ -1,4 +1,4 @@
-"use client";
+'use client';
 import React, { useState } from 'react';
 
 // กำหนดชนิดข้อมูลสำหรับ props ที่ PaymentOption ได้รับ
@@ -88,12 +88,62 @@ export default function CheckoutPage() {
   };
   const handleCancel = () => {
     console.log("Payment Cancelled");
+    // คืนสินค้ากลับไปที่ตะกร้า
+    if (typeof window !== 'undefined') {
+      const orderItems = localStorage.getItem('order_items');
+      if (orderItems) {
+        try {
+          const items = JSON.parse(orderItems);
+          // คืนสินค้ากลับไปที่ตะกร้า
+          localStorage.setItem('cart_items', JSON.stringify(items));
+          // ล้าง order_items (ไม่จำเป็น แต่เพื่อความสะอาด)
+          localStorage.removeItem('order_items');
+        } catch (error) {
+          console.error('Failed to restore cart items:', error);
+        }
+      }
+    }
     window.location.href = '/bucket';
   };
   // ฟังก์ชันใหม่สำหรับปิด Modal และเปลี่ยนหน้า 
   const handleModalClose = () => {
     setIsModalOpen(false);
-    window.location.href = '/allproduct';
+    // บันทึกคำสั่งซื้อลงในประวัติการสั่งซื้อ
+    if (typeof window !== 'undefined') {
+      const orderItems = localStorage.getItem('order_items');
+      if (orderItems) {
+        try {
+          const items = JSON.parse(orderItems);
+          const orderHistory = localStorage.getItem('order_history');
+          let history: any[] = [];
+          
+          if (orderHistory) {
+            history = JSON.parse(orderHistory);
+          }
+          
+          // เพิ่มคำสั่งซื้อใหม่ลงในประวัติ
+          const newOrder = {
+            id: `ORD-${Date.now()}`,
+            items: items,
+            total: items.reduce((sum: number, item: any) => sum + (item.price * item.quantity), 0) + 50,
+            date: new Date().toLocaleDateString('th-TH', {
+              year: 'numeric',
+              month: 'long',
+              day: 'numeric',
+              hour: '2-digit',
+              minute: '2-digit'
+            }),
+            status: 'กำลังเตรียมสินค้า'
+          };
+          
+          history.unshift(newOrder); // เพิ่มใหม่ไว้ด้านบน
+          localStorage.setItem('order_history', JSON.stringify(history));
+        } catch (error) {
+          console.error('Failed to save order history:', error);
+        }
+      }
+    }
+    window.location.href = '/history';
   };
   const isConfirmDisabled = !selectedMethod || selectedMethod === 'qrcode';
   return (
@@ -177,7 +227,7 @@ export default function CheckoutPage() {
             ยืนยันการชำระ
           </button>
     
-          < button
+          <button
             onClick={handleCancel}
             className="w-1/2 py-3 px-6 rounded-lg font-semibold text-white bg-red-600 hover:bg-red-700 transition-colors duration-200"
           >

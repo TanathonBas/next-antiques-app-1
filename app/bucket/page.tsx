@@ -1,4 +1,4 @@
-"use client";
+'use client';
 
 import React, { useState, useMemo, useEffect } from 'react';
 import { useRouter } from "next/navigation";
@@ -200,10 +200,11 @@ const StatusTracker = ({ currentStep, handleNextStep, orderItems }: StatusTracke
 // คอมโพเนนต์สำหรับรายการสินค้า 
 type CartItemsListProps = {
     cartItems: CartItem[];
-    handleRemoveItem: (id: number) => void;
+    handleDecreaseQuantity: (id: number) => void;
+    handleIncreaseQuantity: (id: number) => void;
 };
 
-const CartItemsList = ({ cartItems, handleRemoveItem }: CartItemsListProps) => (
+const CartItemsList = ({ cartItems, handleDecreaseQuantity, handleIncreaseQuantity }: CartItemsListProps) => (
     <div className="space-y-4 mb-6">
         <h2 className="text-xl font-semibold text-gray-800">รายการสินค้า ({cartItems.length} ชิ้น)</h2>
 
@@ -215,16 +216,24 @@ const CartItemsList = ({ cartItems, handleRemoveItem }: CartItemsListProps) => (
                     <div className="flex-1 min-w-0">
                         <h3 className="font-semibold text-gray-900 truncate">{item.name}</h3>
                         <p className="text-sm text-gray-600 truncate">{item.description}</p>
-                        <p className="text-sm text-gray-500">จำนวน: {item.quantity}</p>
+                        <p className="text-sm text-gray-500 mt-1">จำนวน: {item.quantity}</p>
                     </div>
                     <div className="text-right shrink-0">
                         <p className="font-semibold text-gray-900">฿{(item.price * item.quantity).toFixed(2)}</p>
-                        <button
-                            className="text-red-500 hover:text-red-700 text-sm mt-1"
-                            onClick={() => handleRemoveItem(item.id)}
-                        >
-                            ลบ
-                        </button>
+                        <div className="flex items-center justify-end space-x-2 mt-1">
+                            <button
+                                className="text-blue-500 hover:text-blue-700 text-sm"
+                                onClick={() => handleIncreaseQuantity(item.id)}
+                            >
+                                เพิ่ม
+                            </button>
+                            <button
+                                className="text-red-500 hover:text-red-700 text-sm"
+                                onClick={() => handleDecreaseQuantity(item.id)}
+                            >
+                                ลบ
+                            </button>
+                        </div>
                     </div>
                 </div>
             ))
@@ -347,6 +356,34 @@ export default function App() {
         });
     };
 
+    const handleDecreaseQuantity = (id: number) => {
+        setCartItems(prevItems => {
+            const updated = prevItems.map(item => {
+                if (item.id === id) {
+                    // ถ้าจำนวนมากกว่า 1 ให้ลดลง 1
+                    if (item.quantity > 1) {
+                        return { ...item, quantity: item.quantity - 1 };
+                    }
+                    // ถ้าจำนวนเป็น 1 ให้ลบสินค้าออก
+                    return null;
+                }
+                return item;
+            }).filter(item => item !== null) as CartItem[];
+            persistCart(updated);
+            return updated;
+        });
+    };
+
+    const handleIncreaseQuantity = (id: number) => {
+        setCartItems(prevItems => {
+            const updated = prevItems.map(item =>
+                item.id === id ? { ...item, quantity: item.quantity + 1 } : item
+            );
+            persistCart(updated);
+            return updated;
+        });
+    };
+
     const handleAddItem = (product: CartItem) => {
         setCartItems(prevItems => {
             const existingItem = prevItems.find(item => item.id === product.id);
@@ -411,7 +448,8 @@ export default function App() {
                 {/* รายการสินค้า */}
                 <CartItemsList
                     cartItems={cartItems}
-                    handleRemoveItem={handleRemoveItem}
+                    handleDecreaseQuantity={handleDecreaseQuantity}
+                    handleIncreaseQuantity={handleIncreaseQuantity}
                 />
 
                 {/* สรุปยอด */}
