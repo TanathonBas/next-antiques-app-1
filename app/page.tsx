@@ -47,7 +47,9 @@ export default function LandingPage() {
           width: 100%;
           height: 100%;
           object-fit: cover;
+          object-position: center;
           border-radius: 50%;
+          transform: scale(2);
         }
         
         @keyframes rotateY {
@@ -76,7 +78,7 @@ export default function LandingPage() {
                 </div>
                 {/* ด้านหลัง - รูปภาพ */}
                 <div className="flip-back">
-                  <img src="/NINNIN.jpg" alt="Logo" />
+                  <img src="/evilchaninthon.png" alt="Logo" className='w-full h-full object-cover' />
                 </div>
               </div>
             </div>
